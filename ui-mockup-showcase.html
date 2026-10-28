@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inkova UI Design Lab - 10 Modern Mockup Explorations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(22, 27, 44, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.35);
+      --inkova-cyan: #38bdf8;
+      --inkova-purple: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #090d16 65%);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 40px 24px;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 50px auto;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      line-height: 1.6;
+    }
+
+    .grid-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .mockup-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      backdrop-filter: blur(24px);
+      padding: 32px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .mockup-card:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .card-title-group h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rank-pill {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+
+    .card-title-group p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    .score-matrix {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .score-tag {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+    }
+
+    .score-tag span {
+      color: #38bdf8;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    /* Simulation stage */
+    .preview-stage {
+      background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 48px 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 180px;
+      position: relative;
+    }
+
+    .stage-label {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ==========================================================
+       MOCKUP 1: Dynamic Island Capsule (macOS / VisionOS)
+       ========================================================== */
+    .island-pill {
+      background: rgba(15, 23, 42, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(28px);
+    }
+
+    .pill-logo {
+      font-size: 1.1rem;
+      padding: 0 4px;
+    }
+
+    .pill-tools {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 3px;
+      border-radius: 999px;
+    }
+
+    .p-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.15s ease;
+    }
+
+    .p-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .p-btn.active {
+      background: #38bdf8;
+      color: #04101e;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+    }
+
+    .color-pop-trigger {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      cursor: pointer;
+    }
+
+    .swatch-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: 0 0 8px #ef4444;
+    }
+
+    .glass-toggle-chip {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      color: #d8b4fe;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .glass-toggle-chip .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #c084fc;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* ==========================================================
+       MOCKUP 2: Linear / Raycast Frosted Segmented Dock
+       ========================================================== */
+    .raycast-dock {
+      background: rgba(11, 15, 25, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+      border-radius: 14px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      backdrop-filter: blur(32px);
+    }
+
+    .dock-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dock-sep {
+      width: 1px;
+      height: 22px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .dock-tool {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .dock-tool:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .dock-tool.active {
+      background: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+    }
+
+    .dock-tool .keycap {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      opacity: 0.5;
+      margin-top: 1px;
+    }
+
+    /* ==========================================================
+       MOCKUP 3: Screen Studio Vertical Edge Rail
+       ========================================================== */
+    .vertical-rail {
+      background: rgba(15, 20, 32, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    }
+
+    .v-sep {
+      width: 20px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 2px 0;
+    }
+
+    /* ==========================================================
+       MOCKUP 4: Modern Figma Floating Canvas Clusters
+       ========================================================== */
+    .figma-clusters {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .figma-cluster {
+      background: rgba(18, 24, 38, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    }
+
+    /* ==========================================================
+       MOCKUP 5: Apple VisionOS Glass & Depth Bar
+       ========================================================== */
+    .vision-bar {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+      border-radius: 24px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      backdrop-filter: blur(40px) saturate(180%);
+    }
+
+    /* ==========================================================
+       MOCKUP 6: Studio Live Creator Deck (OBS Streamer)
+       ========================================================== */
+    .studio-deck {
+      background: #11141c;
+      border: 2px solid #2d3748;
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.7);
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ==========================================================
+       MOCKUP 7: Radial Halo Disc (Zero Screen Footprint)
+       ========================================================== */
+    .halo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .halo-disc {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #38bdf8, #0284c7);
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.5), inset 0 2px 4px rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .halo-hint {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    /* ==========================================================
+       MOCKUP 8: Stealth Micro Strip (Collapsible Accordion)
+       ========================================================== */
+    .stealth-bar {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ==========================================================
+       MOCKUP 9: Clean Glass Bento Box
+       ========================================================== */
+    .bento-bar {
+      display: flex;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.7);
+      padding: 8px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .bento-cell {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ==========================================================
+       MOCKUP 10: Dynamic Procreate Floating Ring & Droplet
+       ========================================================== */
+    .procreate-bar {
+      background: #18191f;
+      border: 1px solid #323546;
+      border-radius: 30px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .droplet-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+      border: 2px solid #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+    }
+
+    /* Pro/Con Breakdown */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .detail-item h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .detail-item.pros h4 { color: #34d399; }
+    .detail-item.cons h4 { color: #f87171; }
+    .detail-item.best-for h4 { color: #60a5fa; }
+
+    .detail-item p {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    /* Ranking Table */
+    .ranking-section {
+      margin-top: 60px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 32px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      padding: 12px 16px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #94a3b8;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: #f1f5f9;
+    }
+
+    .rating-val {
+      font-weight: 700;
+      color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">💎 Design Architecture Review</div>
+    <h1>Inkova UI Redesign Lab</h1>
+    <p class="subtitle">
+      Comprehensive teardown and 10 next-generation UI mockup paradigms to replace the bulky 4-tier toolbar with an ultra-sleek, presentation-ready overlay.
+    </p>
+  </header>
+
+  <div class="grid-container">
+
+    <!-- CONCEPT 1 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2><span class="rank-pill">#1 TOP PICK</span> Concept 1: The Dynamic Island Capsule</h2>
+          <p>Single-tier 42px floating capsule pill with vector glyphs and flyout popovers.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Screen Footprint: <span>9.8/10</span></div>
+          <div class="score-tag">Aesthetics: <span>9.9/10</span></div>
+          <div class="score-tag">Overall: <span>9.8/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: Single-Tier Island</div>
+        <div class="island-pill">
+          <div class="pill-logo">💎</div>
+          <div class="pill-tools">
+            <button class="p-btn active" title="Pen [P]">✏️</button>
+            <button class="p-btn" title="Highlighter [H]">🖍️</button>
+            <button class="p-btn" title="Laser Pointer [L]">⚡</button>
+            <button class="p-btn" title="Arrow [A]">↗️</button>
+            <button class="p-btn" title="Shape [R]">🔲</button>
+            <button class="p-btn" title="Badge [B]">①</button>
+            <button class="p-btn" title="Blur Redact [X]">🕶️</button>
+            <button class="p-btn" title="Spotlight [F]">🔦</button>
+          </div>
+          <div class="color-pop-trigger" title="Click to expand full palette & slider">
+            <div class="swatch-dot"></div>
+            <span>6px ▾</span>
+          </div>
+          <div class="glass-toggle-chip" title="Toggle Click-Through [G]">
+            <span class="dot"></span>
+            <span>Draw Mode</span>
+          </div>
+          <button class="p-btn" title="Snapshot [Ctrl+S]">📸</button>
+          <button class="p-btn" title="Clear [C]">🗑️</button>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>Reduces vertical screen height by 72% (from 180px down to 42px). Eliminates permanent color rows by using an intelligent click/hover popover.</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Requires an extra click to change colors if user doesn't use number hotkeys (1-9).</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Keynote speakers, live YouTube demos, and developers who need zero code obstruction.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 2 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2><span class="rank-pill">#2 RUNNER UP</span> Concept 2: The Raycast / Linear Segmented Dock</h2>
+          <p>Frosted dark slate with high-contrast monochrome vector icons and visible keycap hints.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Ergonomics: <span>9.7/10</span></div>
+          <div class="score-tag">Visual Polish: <span>9.6/10</span></div>
+          <div class="score-tag">Overall: <span>9.6/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: Raycast Pro Glass</div>
+        <div class="raycast-dock">
+          <span style="font-weight: 700; font-size: 0.95rem; color: #818cf8; margin-right: 4px;">Inkova</span>
+          <div class="dock-sep"></div>
+          <div class="dock-group">
+            <button class="dock-tool active"><span>✏️</span><span class="keycap">P</span></button>
+            <button class="dock-tool"><span>🖍️</span><span class="keycap">H</span></button>
+            <button class="dock-tool"><span>⚡</span><span class="keycap">L</span></button>
+            <button class="dock-tool"><span>↗️</span><span class="keycap">A</span></button>
+            <button class="dock-tool"><span>🔲</span><span class="keycap">R</span></button>
+          </div>
+          <div class="dock-sep"></div>
+          <div class="dock-group">
+            <button class="dock-tool"><span>🔦</span><span class="keycap">F</span></button>
+            <button class="dock-tool"><span>🔍</span><span class="keycap">Z</span></button>
+            <button class="dock-tool"><span>🕶️</span><span class="keycap">X</span></button>
+          </div>
+          <div class="dock-sep"></div>
+          <div class="color-pop-trigger">
+            <div class="swatch-dot" style="background:#38bdf8; box-shadow:0 0 8px #38bdf8;"></div>
+            <span>4px</span>
+          </div>
+          <div class="dock-group">
+            <button class="dock-tool"><span>↩</span><span class="keycap">⌘Z</span></button>
+            <button class="dock-tool"><span>🗑️</span><span class="keycap">C</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>Visible keycap hints under each tool accelerate muscle memory. Clear vertical dividers separate drawing tools from presentation utilities.</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Slightly wider horizontal layout (~540px).</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Power users, engineers, and keyboard-first presenters who love Raycast / Linear aesthetics.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 3 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2>Concept 3: Screen Studio Vertical Edge Rail</h2>
+          <p>Anchors flush to the left or right screen bezel, freeing up the bottom and top entirely.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Screen Clearance: <span>9.6/10</span></div>
+          <div class="score-tag">16:9 Presentation: <span>9.5/10</span></div>
+          <div class="score-tag">Overall: <span>9.3/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: Edge Rail</div>
+        <div class="vertical-rail">
+          <span style="font-size: 1.1rem; margin-bottom: 4px;">💎</span>
+          <button class="p-btn active">✏️</button>
+          <button class="p-btn">🖍️</button>
+          <button class="p-btn">↗️</button>
+          <button class="p-btn">🔲</button>
+          <button class="p-btn">①</button>
+          <div class="v-sep"></div>
+          <button class="p-btn">🔦</button>
+          <button class="p-btn">🕶️</button>
+          <div class="v-sep"></div>
+          <div class="swatch-dot" style="margin: 4px 0; cursor:pointer;"></div>
+          <div class="v-sep"></div>
+          <button class="p-btn">🗑️</button>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>Takes zero vertical space. On widescreen (16:9 / 21:9) monitors, side margins are almost always unused.</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Requires horizontal flyout drawer for sliders and color palettes.</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Screen recording, tutorial creators, and users with multi-monitor setups.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 4 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2>Concept 4: Figma / Miro Segmented Floating Clusters</h2>
+          <p>Physical separation of concerns into distinct floating pill cards grouped by task.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Modularity: <span>9.5/10</span></div>
+          <div class="score-tag">Clarity: <span>9.2/10</span></div>
+          <div class="score-tag">Overall: <span>9.2/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: Segmented Clusters</div>
+        <div class="figma-clusters">
+          <div class="figma-cluster">
+            <span style="font-size: 0.85rem; font-weight: 700; color: #a5b4fc;">Inkova</span>
+          </div>
+          <div class="figma-cluster">
+            <button class="p-btn active">✏️</button>
+            <button class="p-btn">🖍️</button>
+            <button class="p-btn">⚡</button>
+            <button class="p-btn">↗️</button>
+            <button class="p-btn">🔲</button>
+          </div>
+          <div class="figma-cluster">
+            <button class="p-btn">🔦</button>
+            <button class="p-btn">🕶️</button>
+            <button class="p-btn">①</button>
+          </div>
+          <div class="figma-cluster">
+            <div class="swatch-dot" style="background:#10b981; box-shadow:0 0 8px #10b981;"></div>
+            <button class="p-btn">↩</button>
+            <button class="p-btn">🗑️</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>Prevents "one gigantic toolbar" syndrome. Each cluster can be individually pinned, collapsed, or hidden.</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Multiple drop-shadows and borders can feel visually busier on chaotic wallpapers.</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Interactive whiteboard sessions, collaborative design reviews, and agile sprints.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 5 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2>Concept 5: Apple VisionOS Frosted Glass & Specular Depth</h2>
+          <p>High-translucency glass with soft specular edge highlight and vibrant tinted highlights.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Aesthetic Wow: <span>9.8/10</span></div>
+          <div class="score-tag">Legibility: <span>8.9/10</span></div>
+          <div class="score-tag">Overall: <span>9.1/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: VisionOS Liquid Glass</div>
+        <div class="vision-bar">
+          <span style="font-weight: 700; font-size: 1rem; color: #fff;">Inkova</span>
+          <div style="display: flex; gap: 8px;">
+            <button class="p-btn active" style="background: rgba(255,255,255,0.25); color:#fff; border: 1px solid rgba(255,255,255,0.4);">✏️</button>
+            <button class="p-btn" style="color:#e2e8f0;">🖍️</button>
+            <button class="p-btn" style="color:#e2e8f0;">⚡</button>
+            <button class="p-btn" style="color:#e2e8f0;">↗️</button>
+            <button class="p-btn" style="color:#e2e8f0;">🔦</button>
+          </div>
+          <div class="swatch-dot" style="background:#f43f5e; box-shadow: 0 0 10px #f43f5e;"></div>
+          <button class="p-btn" style="color:#e2e8f0;">🗑️</button>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>Looks like a million-dollar native macOS / visionOS app. Blends effortlessly into any desktop background.</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Slightly lower contrast on very bright white backgrounds unless adaptive contrast is applied.</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Showcase product demos, executive presentations, and design agency pitches.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 6 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2>Concept 6: The Studio Live Creator Deck (OBS & Streamer)</h2>
+          <p>High-contrast, high-readability tactile buttons with unmissable status badges.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Live Safety: <span>9.9/10</span></div>
+          <div class="score-tag">Presenter Clarity: <span>9.7/10</span></div>
+          <div class="score-tag">Overall: <span>9.0/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: Studio Deck</div>
+        <div class="studio-deck">
+          <div class="live-badge">🔴 ON AIR</div>
+          <span style="font-weight: 700; color: #fff;">INKOVA</span>
+          <div class="dock-sep"></div>
+          <button class="dock-tool active" style="width:42px; height:42px;"><span>✏️</span><span class="keycap">PEN</span></button>
+          <button class="dock-tool" style="width:42px; height:42px;"><span>🖍️</span><span class="keycap">HIGH</span></button>
+          <button class="dock-tool" style="width:42px; height:42px;"><span>🔦</span><span class="keycap">SPOT</span></button>
+          <button class="dock-tool" style="width:42px; height:42px;"><span>🕶️</span><span class="keycap">REDACT</span></button>
+          <div class="dock-sep"></div>
+          <div style="background:#1e293b; padding: 6px 12px; border-radius:8px; border:1px solid #334155; font-size:0.8rem; font-weight:700; color:#38bdf8;">
+            PASS-THRU: SPACE
+          </div>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>Zero accidental clicks while streaming. Big hit targets prevent missed clicks while talking live.</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Larger visual weight than minimalist pills.</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Twitch/YouTube tech streamers, webinar hosts, and online course instructors.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 7 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2>Concept 7: The Radial Halo Disc (Zero Persistent Screen Clutter)</h2>
+          <p>Persistent UI is just a 44px glowing orb. Full menu opens at cursor position via Tab.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Zero Clutter: <span>10/10</span></div>
+          <div class="score-tag">Speed: <span>9.2/10</span></div>
+          <div class="score-tag">Overall: <span>9.0/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: Floating Halo Orb</div>
+        <div class="halo-wrapper">
+          <div class="halo-disc">💎</div>
+          <div class="halo-hint">
+            <strong>Persistent Screen Footprint: 48px only!</strong><br>
+            Hover or press <kbd style="background:#334155; padding:2px 6px; border-radius:4px; font-size:0.75rem;">Tab</kbd> anywhere on screen to bloom 8-slice pie menu.
+          </div>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>99.9% screen clearance! Never covers your slides, terminal, or code editor.</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Requires users to learn radial flick gesture or hotkeys.</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Purists who hate floating widgets blocking their viewport.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 8 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2>Concept 8: Foldable Stealth Accordion Bar</h2>
+          <p>Default collapsed 28px micro-strip that smoothly rolls open on hover or hotkey.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Versatility: <span>9.3/10</span></div>
+          <div class="score-tag">Screen Economy: <span>9.4/10</span></div>
+          <div class="score-tag">Overall: <span>8.8/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: Collapsed Micro Strip</div>
+        <div class="stealth-bar">
+          <span>💎 Inkova</span>
+          <span style="color:#38bdf8;">•</span>
+          <span>✏️ Pen</span>
+          <div class="swatch-dot" style="width:10px; height:10px; background:#ef4444;"></div>
+          <span style="color:#64748b;">|</span>
+          <span style="color:#94a3b8; font-size:0.75rem;">Hover to expand controls ▾</span>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>Best of both worlds: extreme minimalism when idle, full suite of controls on demand.</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Accordion animation takes ~150ms before clicking secondary tools.</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Users who frequently alternate between long writing sessions and quick scribbles.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 9 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2>Concept 9: The Frosted Bento Bar</h2>
+          <p>Organized modular cards grouping Drawing, Presentation, Color, and Canvas actions.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Chunking: <span>9.4/10</span></div>
+          <div class="score-tag">Organization: <span>9.1/10</span></div>
+          <div class="score-tag">Overall: <span>8.7/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: Bento Bar</div>
+        <div class="bento-bar">
+          <div class="bento-cell">
+            <span style="font-weight:700; font-size:0.8rem; color:#818cf8;">DRAW</span>
+            <button class="p-btn active">✏️</button>
+            <button class="p-btn">🖍️</button>
+            <button class="p-btn">↗️</button>
+          </div>
+          <div class="bento-cell">
+            <span style="font-weight:700; font-size:0.8rem; color:#38bdf8;">FX</span>
+            <button class="p-btn">🔦</button>
+            <button class="p-btn">🕶️</button>
+          </div>
+          <div class="bento-cell">
+            <div class="swatch-dot"></div>
+            <span style="font-size:0.75rem; font-weight:600;">6px</span>
+          </div>
+          <div class="bento-cell">
+            <button class="p-btn">📸</button>
+            <button class="p-btn">🗑️</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>Clear cognitive grouping. Bento cells prevent eye-scanning fatigue.</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Slightly more frame border density.</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Desktop applications where structured visual layout is prioritized over raw minimalism.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 10 -->
+    <div class="mockup-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2>Concept 10: Dynamic Procreate-Style Floating Ring & Droplet</h2>
+          <p>Tactile studio controls with physical ink droplet swatch and conical color ring.</p>
+        </div>
+        <div class="score-matrix">
+          <div class="score-tag">Artistic Feel: <span>9.6/10</span></div>
+          <div class="score-tag">Tactility: <span>9.0/10</span></div>
+          <div class="score-tag">Overall: <span>8.6/10</span></div>
+        </div>
+      </div>
+
+      <div class="preview-stage">
+        <div class="stage-label">Interactive Render: Procreate Studio Bar</div>
+        <div class="procreate-bar">
+          <span style="font-size:1.1rem;">💎</span>
+          <button class="p-btn active" style="background:#262938; color:#38bdf8; border:1px solid #38bdf8;">✏️</button>
+          <button class="p-btn">🖍️</button>
+          <button class="p-btn">⚡</button>
+          <button class="p-btn">🔲</button>
+          <div class="droplet-btn" title="Tap for color wheel"></div>
+          <div style="font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:#94a3b8;">r: 6px</div>
+          <button class="p-btn">🗑️</button>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item pros">
+          <h4>Key Advantages</h4>
+          <p>Feels like high-end iPad drawing software (Procreate, Concepts, Paper by WeTransfer).</p>
+        </div>
+        <div class="detail-item cons">
+          <h4>Tradeoffs</h4>
+          <p>Less suited for quick corporate slide markup, more artist-centric.</p>
+        </div>
+        <div class="detail-item best-for">
+          <h4>Best Fit For</h4>
+          <p>Drawing tablets, Wacom/Apple Pencil users, digital illustrators.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARATIVE RANKING MATRIX -->
+    <div class="ranking-section">
+      <h2 style="font-size: 1.6rem; margin-bottom: 8px;">📊 Comparative Decision Matrix</h2>
+      <p style="color: var(--text-muted); margin-bottom: 24px;">Ranked across 5 key dimensions: Screen Obstruction, Ergonomics / Fitts' Law, Visual Polish, Presentation Safety, and Implementation Complexity.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Concept Name</th>
+            <th>Screen Clearance</th>
+            <th>Ergonomics</th>
+            <th>Visual Polish</th>
+            <th>Presenter Safety</th>
+            <th>Composite Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: rgba(99, 102, 241, 0.08);">
+            <td><strong style="color:#f59e0b;">🥇 #1</strong></td>
+            <td><strong>Dynamic Island Capsule</strong></td>
+            <td class="rating-val">9.8 / 10</td>
+            <td class="rating-val">9.6 / 10</td>
+            <td class="rating-val">9.9 / 10</td>
+            <td class="rating-val">9.5 / 10</td>
+            <td><strong style="color:#38bdf8; font-size:1.05rem;">9.8 / 10</strong></td>
+          </tr>
+          <tr style="background: rgba(99, 102, 241, 0.04);">
+            <td><strong style="color:#94a3b8;">🥈 #2</strong></td>
+            <td><strong>Raycast / Linear Dark Dock</strong></td>
+            <td class="rating-val">9.3 / 10</td>
+            <td class="rating-val">9.8 / 10</td>
+            <td class="rating-val">9.7 / 10</td>
+            <td class="rating-val">9.6 / 10</td>
+            <td><strong style="color:#38bdf8; font-size:1.05rem;">9.6 / 10</strong></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#b45309;">🥉 #3</strong></td>
+            <td><strong>Screen Studio Vertical Rail</strong></td>
+            <td class="rating-val">9.7 / 10</td>
+            <td class="rating-val">9.1 / 10</td>
+            <td class="rating-val">9.3 / 10</td>
+            <td class="rating-val">9.2 / 10</td>
+            <td><strong style="color:#38bdf8;">9.3 / 10</strong></td>
+          </tr>
+          <tr>
+            <td>#4</td>
+            <td>Figma Segmented Clusters</td>
+            <td class="rating-val">9.1 / 10</td>
+            <td class="rating-val">9.4 / 10</td>
+            <td class="rating-val">9.2 / 10</td>
+            <td class="rating-val">9.1 / 10</td>
+            <td><strong style="color:#38bdf8;">9.2 / 10</strong></td>
+          </tr>
+          <tr>
+            <td>#5</td>
+            <td>Apple VisionOS Liquid Glass</td>
+            <td class="rating-val">9.0 / 10</td>
+            <td class="rating-val">9.0 / 10</td>
+            <td class="rating-val">9.8 / 10</td>
+            <td class="rating-val">8.8 / 10</td>
+            <td><strong style="color:#38bdf8;">9.1 / 10</strong></td>
+          </tr>
+          <tr>
+            <td>#6</td>
+            <td>Studio Live Creator Deck</td>
+            <td class="rating-val">8.2 / 10</td>
+            <td class="rating-val">9.5 / 10</td>
+            <td class="rating-val">8.9 / 10</td>
+            <td class="rating-val">9.9 / 10</td>
+            <td><strong style="color:#38bdf8;">9.0 / 10</strong></td>
+          </tr>
+          <tr>
+            <td>#7</td>
+            <td>Radial Halo Disc (Zero Clutter)</td>
+            <td class="rating-val">10 / 10</td>
+            <td class="rating-val">8.8 / 10</td>
+            <td class="rating-val">9.1 / 10</td>
+            <td class="rating-val">8.5 / 10</td>
+            <td><strong style="color:#38bdf8;">9.0 / 10</strong></td>
+          </tr>
+          <tr>
+            <td>#8</td>
+            <td>Foldable Stealth Accordion</td>
+            <td class="rating-val">9.5 / 10</td>
+            <td class="rating-val">8.6 / 10</td>
+            <td class="rating-val">8.8 / 10</td>
+            <td class="rating-val">8.7 / 10</td>
+            <td><strong style="color:#38bdf8;">8.8 / 10</strong></td>
+          </tr>
+          <tr>
+            <td>#9</td>
+            <td>Frosted Bento Bar</td>
+            <td class="rating-val">8.6 / 10</td>
+            <td class="rating-val">9.0 / 10</td>
+            <td class="rating-val">8.9 / 10</td>
+            <td class="rating-val">8.6 / 10</td>
+            <td><strong style="color:#38bdf8;">8.7 / 10</strong></td>
+          </tr>
+          <tr>
+            <td>#10</td>
+            <td>Procreate Floating Ring & Droplet</td>
+            <td class="rating-val">8.9 / 10</td>
+            <td class="rating-val">8.5 / 10</td>
+            <td class="rating-val">9.2 / 10</td>
+            <td class="rating-val">8.3 / 10</td>
+            <td><strong style="color:#38bdf8;">8.6 / 10</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</body>
+</html>
