@@ -171,7 +171,7 @@ pub fn run() {
             let overlay_state: SharedOverlayState = Arc::new(Mutex::new(OverlayState::default()));
             app.manage(overlay_state.clone());
 
-            let toggle_i = MenuItem::with_id(app, "toggle", "Toggle GlassInk (Show / Hide)", true, None::<&str>)?;
+            let toggle_i = MenuItem::with_id(app, "toggle", "Toggle Inkova (Show / Hide)", true, None::<&str>)?;
             let show_i = MenuItem::with_id(app, "show", "Show & Focus", true, None::<&str>)?;
             let hide_i = MenuItem::with_id(app, "hide", "Hide to Tray", true, None::<&str>)?;
             let update_i = MenuItem::with_id(app, "update", "Check for Updates...", true, None::<&str>)?;

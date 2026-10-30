@@ -157,7 +157,7 @@ These shortcuts work globally across Windows even when Glass Mode has passed OS 
 
 | Global Shortcut | Action | Scope |
 | :---: | :--- | :--- |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd> | **Toggle GlassInk Visibility** | Instant summon / hide to system tray from anywhere |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd> | **Toggle Inkova Visibility** | Instant summon / hide to system tray from anywhere |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd> | **Toggle Glass Mode** | OS-level safe recovery from pass-through |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> | **Global Clear Canvas** | Clears on-screen ink from any application |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd> | **Global Escape & Focus** | Cancels overlay modes and refocuses Inkova |

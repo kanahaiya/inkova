@@ -3,6 +3,7 @@ name: Production Release Build
 on:
   push:
     branches:
+      - main
       - master
     tags:
       - 'v*'
