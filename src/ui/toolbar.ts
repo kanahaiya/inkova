@@ -652,83 +652,24 @@ export class Toolbar {
       isDragging = false;
       this.onDragStateChange?.(false);
 
-      // Smart Edge Snapping & Auto-Orientation
+      // Keep position exactly where the user placed it, safely clamped within viewport without changing orientation
       const screenW = window.innerWidth;
       const screenH = window.innerHeight;
-      const rect = this.container.getBoundingClientRect();
-      let targetLeft = rect.left;
-      let targetTop = rect.top;
+      const minLeft = 4;
+      const maxLeft = Math.max(minLeft, screenW - this.container.offsetWidth - 4);
+      const minTop = 4;
+      const maxTop = Math.max(minTop, screenH - this.container.offsetHeight - 4);
 
-      // 1. Drop near Left Bezel (< 85px) -> Snap to Vertical Dock on Left
-      if (rect.left < 85) {
-        if (this.orientation !== 'vertical') {
-          this.orientation = 'vertical';
-          this.state.toolbarOrientation = 'vertical';
-          this.onStateChange(this.state);
-          this.render();
-        }
-        targetLeft = 14;
-        targetTop = Math.max(16, Math.min(screenH - this.container.offsetHeight - 16, targetTop));
-      }
-      // 2. Drop near Right Bezel (< 85px from right) -> Snap to Vertical Dock on Right
-      else if (rect.right > screenW - 85) {
-        if (this.orientation !== 'vertical') {
-          this.orientation = 'vertical';
-          this.state.toolbarOrientation = 'vertical';
-          this.onStateChange(this.state);
-          this.render();
-        }
-        targetLeft = screenW - this.container.offsetWidth - 14;
-        targetTop = Math.max(16, Math.min(screenH - this.container.offsetHeight - 16, targetTop));
-      }
-      // 3. Drop near Top Bezel (< 85px from top) -> Snap to Horizontal Bar on Top
-      else if (rect.top < 85) {
-        if (this.orientation !== 'horizontal') {
-          this.orientation = 'horizontal';
-          this.state.toolbarOrientation = 'horizontal';
-          this.onStateChange(this.state);
-          this.render();
-        }
-        targetTop = 16;
-        const centerX = targetLeft + this.container.offsetWidth / 2;
-        if (Math.abs(centerX - screenW / 2) < 120) {
-          targetLeft = Math.round((screenW - this.container.offsetWidth) / 2);
-        } else {
-          targetLeft = Math.max(12, Math.min(screenW - this.container.offsetWidth - 12, targetLeft));
-        }
-      }
-      // 4. Drop near Bottom Bezel (< 85px from bottom) -> Snap to Horizontal Bar on Bottom
-      else if (rect.bottom > screenH - 85) {
-        if (this.orientation !== 'horizontal') {
-          this.orientation = 'horizontal';
-          this.state.toolbarOrientation = 'horizontal';
-          this.onStateChange(this.state);
-          this.render();
-        }
-        targetTop = screenH - this.container.offsetHeight - 16;
-        const centerX = targetLeft + this.container.offsetWidth / 2;
-        if (Math.abs(centerX - screenW / 2) < 120) {
-          targetLeft = Math.round((screenW - this.container.offsetWidth) / 2);
-        } else {
-          targetLeft = Math.max(12, Math.min(screenW - this.container.offsetWidth - 12, targetLeft));
-        }
-      } else {
-        targetLeft = Math.max(12, Math.min(screenW - this.container.offsetWidth - 12, targetLeft));
-        targetTop = Math.max(12, Math.min(screenH - this.container.offsetHeight - 12, targetTop));
-      }
+      const targetLeft = Math.max(minLeft, Math.min(maxLeft, this.container.offsetLeft));
+      const targetTop = Math.max(minTop, Math.min(maxTop, this.container.offsetTop));
 
-      this.container.style.transition = 'left 0.22s cubic-bezier(0.16, 1, 0.3, 1), top 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
       this.container.style.left = `${targetLeft}px`;
       this.container.style.top = `${targetTop}px`;
       this.container.style.transform = 'none';
 
       this.state.toolbarPosition = { left: targetLeft, top: targetTop };
       this.onStateChange(this.state);
-
-      setTimeout(() => {
-        this.container.style.transition = '';
-        this.notifyBounds();
-      }, 240);
+      this.notifyBounds();
     };
 
     this.container.addEventListener('pointerdown', onPointerDown);
