@@ -164,6 +164,9 @@ export class InkovaApp {
       },
       () => {
         this.syncToolbarBounds();
+      },
+      (isDragging) => {
+        this.notifyDragState(isDragging);
       }
     );
 
@@ -692,6 +695,15 @@ export class InkovaApp {
     } catch {
       // In browser preview mode
     }
+  }
+
+  private async notifyDragState(isDragging: boolean) {
+    try {
+      if (typeof (window as any).__TAURI_INTERNALS__ !== 'undefined') {
+        const { invoke } = await import('@tauri-apps/api/core');
+        await invoke('set_toolbar_drag_state', { isDragging });
+      }
+    } catch {}
   }
 
   private handleSnapshot() {

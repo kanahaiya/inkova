@@ -74,13 +74,15 @@ export class Toolbar {
   ];
 
   private onBoundsChange?: () => void;
+  private onDragStateChange?: (isDragging: boolean) => void;
 
   constructor(
     container: HTMLElement,
     initialState: AppState,
     onStateChange: (state: AppState) => void,
     onAction: (action: ToolbarAction) => void,
-    onBoundsChange?: () => void
+    onBoundsChange?: () => void,
+    onDragStateChange?: (isDragging: boolean) => void
   ) {
     this.container = container;
     this.state = initialState;
@@ -88,6 +90,7 @@ export class Toolbar {
     this.onStateChange = onStateChange;
     this.onAction = onAction;
     this.onBoundsChange = onBoundsChange;
+    this.onDragStateChange = onDragStateChange;
 
     this.applyPosition();
     this.render();
@@ -569,6 +572,7 @@ export class Toolbar {
       if (!handle) return;
 
       isDragging = true;
+      this.onDragStateChange?.(true);
       startX = e.clientX;
       startY = e.clientY;
 
@@ -615,6 +619,7 @@ export class Toolbar {
     const onMouseUp = () => {
       if (!isDragging) return;
       isDragging = false;
+      this.onDragStateChange?.(false);
       hasTriggeredOffscreenSwitch = false;
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);

@@ -28,6 +28,7 @@ pub struct DisplayInfo {
 
 pub struct OverlayState {
     pub is_glass_mode: bool,
+    pub is_dragging: bool,
     pub toolbar_bounds: Rect,
     pub is_cursor_in_toolbar: bool,
 }
@@ -36,6 +37,7 @@ impl Default for OverlayState {
     fn default() -> Self {
         Self {
             is_glass_mode: true,
+            is_dragging: false,
             toolbar_bounds: Rect::default(),
             is_cursor_in_toolbar: false,
         }
@@ -189,6 +191,23 @@ fn set_glass_mode(
     } else {
         if let Some(window) = app.get_webview_window("main") {
             let _ = window.set_ignore_cursor_events(!s.is_cursor_in_toolbar);
+        }
+    }
+}
+
+#[tauri::command]
+fn set_toolbar_drag_state(
+    state: tauri::State<'_, SharedOverlayState>,
+    app: tauri::AppHandle,
+    is_dragging: bool,
+) {
+    if let Ok(mut s) = state.lock() {
+        s.is_dragging = is_dragging;
+        if is_dragging {
+            s.is_cursor_in_toolbar = true;
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.set_ignore_cursor_events(false);
+            }
         }
     }
 }
@@ -362,15 +381,20 @@ pub fn run() {
                     loop {
                         std::thread::sleep(Duration::from_millis(25));
 
-                        let (is_glass, bounds, was_in_toolbar) = {
+                        let (is_glass, is_dragging, bounds, was_in_toolbar) = {
                             let s = match state_clone.lock() {
                                 Ok(guard) => guard,
                                 Err(_) => break,
                             };
-                            (s.is_glass_mode, s.toolbar_bounds, s.is_cursor_in_toolbar)
+                            (s.is_glass_mode, s.is_dragging, s.toolbar_bounds, s.is_cursor_in_toolbar)
                         };
 
                         if !is_glass {
+                            continue;
+                        }
+
+                        // While actively dragging, keep window capturing mouse events without switching to pass-through
+                        if is_dragging {
                             continue;
                         }
 
@@ -417,6 +441,7 @@ pub fn run() {
             exit_app,
             restart_app,
             set_glass_mode,
+            set_toolbar_drag_state,
             update_toolbar_bounds,
             get_available_displays,
             switch_display,
