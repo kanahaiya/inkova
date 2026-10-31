@@ -164,7 +164,7 @@ export class HotkeyManager {
           return;
         }
 
-        const actions = ['undo', 'redo', 'clear', 'toggle-glass', 'spotlight', 'zoom', 'snapshot', 'escape', 'help', 'toggle-tray', 'hide-tray', 'toggle-orientation', 'quit'];
+        const actions = ['undo', 'redo', 'clear', 'toggle-glass', 'spotlight', 'zoom', 'snapshot', 'escape', 'help', 'toggle-tray', 'hide-tray', 'toggle-orientation', 'switch-display', 'quit'];
         if (actions.includes(target)) {
           this.onAction(target as any);
           e.preventDefault();
