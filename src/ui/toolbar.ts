@@ -593,14 +593,20 @@ export class Toolbar {
       const rawLeft = initialLeft + dx;
       const rawTop = initialTop + dy;
 
-      // If user drags aggressively off the left or right screen edge, trigger display switch
+      // If user drags to screen edge (<= 2px), trigger display switch without dropping drag
       if (!hasTriggeredOffscreenSwitch) {
-        if (e.clientX <= 0 || e.clientX >= window.innerWidth - 1) {
+        if (e.clientX <= 2 || e.clientX >= window.innerWidth - 3) {
           hasTriggeredOffscreenSwitch = true;
           this.onAction('switch-display');
-          // Terminate drag cleanly as window moves to another monitor
-          onMouseUp();
-          return;
+          // Reset coordinate reference point so the drag smoothly continues on the new monitor
+          startX = e.clientX;
+          startY = e.clientY;
+          initialLeft = rawLeft;
+          initialTop = rawTop;
+          // Debounce so it doesn't bounce repeatedly between screens in a loop
+          setTimeout(() => {
+            hasTriggeredOffscreenSwitch = false;
+          }, 600);
         }
       }
 

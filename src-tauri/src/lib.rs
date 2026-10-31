@@ -376,6 +376,7 @@ pub fn run() {
                     }
                     unsafe extern "system" {
                         fn GetCursorPos(lpPoint: *mut POINT) -> i32;
+                        fn GetAsyncKeyState(vKey: i32) -> i16;
                     }
 
                     loop {
@@ -393,9 +394,18 @@ pub fn run() {
                             continue;
                         }
 
-                        // While actively dragging, keep window capturing mouse events without switching to pass-through
+                        // While actively dragging, check physical mouse button (VK_LBUTTON = 0x01).
+                        // Never drop mouse capture while left mouse button is physically held down.
                         if is_dragging {
-                            continue;
+                            let is_lbutton_down = unsafe { (GetAsyncKeyState(0x01) as u16 & 0x8000) != 0 };
+                            if is_lbutton_down {
+                                continue;
+                            } else {
+                                // Mouse released physically outside window
+                                if let Ok(mut s) = state_clone.lock() {
+                                    s.is_dragging = false;
+                                }
+                            }
                         }
 
                         let window = match app_handle.get_webview_window("main") {
