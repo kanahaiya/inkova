@@ -73,6 +73,7 @@ export const DEFAULT_SHORTCUTS: Record<string, string> = {
   undo: 'ctrl+z',
   redo: 'ctrl+y',
   snapshot: 'ctrl+s',
+  'switch-display': 'ctrl+shift+d',
   'toggle-tray': 'ctrl+shift+h',
   'toggle-orientation': 'alt+o',
   help: '?'

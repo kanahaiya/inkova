@@ -26,6 +26,7 @@ export const ICONS = {
   backdrop: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>`,
   chevron: `<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>`,
   rotate: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`,
+  display: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
   expand: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`
 };
 
@@ -50,11 +51,13 @@ const TOOLS: ToolDef[] = [
   { tool: 'eraser', keycap: 'E', name: 'Eraser', shortcut: 'E' },
 ];
 
+export type ToolbarAction = 'undo' | 'redo' | 'clear' | 'toggle-glass' | 'snapshot' | 'help' | 'quit' | 'hide-tray' | 'toggle-orientation' | 'open-pro' | 'switch-display';
+
 export class Toolbar {
   private container: HTMLElement;
   private state: AppState;
   private onStateChange: (state: AppState) => void;
-  private onAction: (action: 'undo' | 'redo' | 'clear' | 'toggle-glass' | 'snapshot' | 'help' | 'quit' | 'hide-tray' | 'toggle-orientation' | 'open-pro') => void;
+  private onAction: (action: ToolbarAction) => void;
   private isCollapsed = false;
   private activePopover: 'style' | 'backdrop' | null = null;
   private orientation: 'horizontal' | 'vertical' = 'horizontal';
@@ -76,7 +79,7 @@ export class Toolbar {
     container: HTMLElement,
     initialState: AppState,
     onStateChange: (state: AppState) => void,
-    onAction: (action: 'undo' | 'redo' | 'clear' | 'toggle-glass' | 'snapshot' | 'help' | 'quit' | 'hide-tray' | 'toggle-orientation' | 'open-pro') => void,
+    onAction: (action: ToolbarAction) => void,
     onBoundsChange?: () => void
   ) {
     this.container = container;
@@ -367,6 +370,7 @@ export class Toolbar {
 
         <!-- Section 6: Action & Utility Controls -->
         <div class="capsule-group actions-group">
+          <button class="action-capsule-btn" id="btn-switch-display" title="Switch Display Screen [${this.getShortcutDisplay('switch-display', 'Ctrl+Shift+D')}]">${ICONS.display}</button>
           <button class="action-capsule-btn orientation-btn" id="btn-orientation" title="Flip Orientation [${this.getShortcutDisplay('toggle-orientation', 'Alt+O')}]">${ICONS.rotate}</button>
           <button class="action-capsule-btn" id="btn-snapshot" title="Save / Export Snapshot [${this.getShortcutDisplay('snapshot', 'Ctrl+S')}]">${ICONS.snapshot}</button>
           <button class="action-capsule-btn" id="btn-undo" title="Undo [${this.getShortcutDisplay('undo', 'Ctrl+Z')}]">${ICONS.undo}</button>
@@ -386,6 +390,12 @@ export class Toolbar {
   }
 
   private attachEvents() {
+    // Switch Display
+    this.container.querySelector('#btn-switch-display')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.onAction('switch-display');
+    });
+
     // Orientation Flip
     this.container.querySelector('#btn-orientation')?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -572,13 +582,30 @@ export class Toolbar {
       e.preventDefault();
     };
 
+    let hasTriggeredOffscreenSwitch = false;
+
     const onMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
 
-      const newLeft = Math.max(8, Math.min(window.innerWidth - this.container.offsetWidth - 8, initialLeft + dx));
-      const newTop = Math.max(8, Math.min(window.innerHeight - this.container.offsetHeight - 8, initialTop + dy));
+      // Allow dragging off the screen edges slightly to trigger multi-monitor jump
+      const rawLeft = initialLeft + dx;
+      const rawTop = initialTop + dy;
+
+      // If user drags aggressively off the left or right screen edge, trigger display switch
+      if (!hasTriggeredOffscreenSwitch) {
+        if (e.clientX <= 0 || e.clientX >= window.innerWidth - 1) {
+          hasTriggeredOffscreenSwitch = true;
+          this.onAction('switch-display');
+          // Terminate drag cleanly as window moves to another monitor
+          onMouseUp();
+          return;
+        }
+      }
+
+      const newLeft = Math.max(8, Math.min(window.innerWidth - this.container.offsetWidth - 8, rawLeft));
+      const newTop = Math.max(8, Math.min(window.innerHeight - this.container.offsetHeight - 8, rawTop));
 
       this.container.style.left = `${newLeft}px`;
       this.container.style.top = `${newTop}px`;
@@ -588,6 +615,7 @@ export class Toolbar {
     const onMouseUp = () => {
       if (!isDragging) return;
       isDragging = false;
+      hasTriggeredOffscreenSwitch = false;
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
 

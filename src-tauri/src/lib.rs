@@ -113,16 +113,52 @@ fn switch_display(app: tauri::AppHandle, display_id: usize) -> Result<(), String
         if let Some(window) = app.get_webview_window("main") {
             let pos = *target_monitor.position();
             let size = *target_monitor.size();
+            
+            // On Windows, moving a fullscreen window across monitors requires disabling fullscreen,
+            // positioning precisely, updating the size, and restoring fullscreen.
             let _ = window.set_fullscreen(false);
             let _ = window.set_position(pos);
             let _ = window.set_size(size);
-            let _ = window.set_fullscreen(true);
-            let _ = window.set_focus();
-            let _ = window.emit("display-changed", ());
+            
+            // Small pause ensures Windows DWM registers the monitor change before re-engaging fullscreen
+            let win_clone = window.clone();
+            std::thread::spawn(move || {
+                std::thread::sleep(Duration::from_millis(50));
+                let _ = win_clone.set_position(pos);
+                let _ = win_clone.set_size(size);
+                let _ = win_clone.set_fullscreen(true);
+                let _ = win_clone.set_focus();
+                let _ = win_clone.emit("display-changed", ());
+            });
+
             return Ok(());
         }
     }
     Err("Display not found".to_string())
+}
+
+#[tauri::command]
+fn switch_to_next_display(app: tauri::AppHandle) -> Result<usize, String> {
+    let monitors = app.available_monitors().map_err(|e| e.to_string())?;
+    if monitors.is_empty() {
+        return Ok(0);
+    }
+    let window = match app.get_webview_window("main") {
+        Some(w) => w,
+        None => return Err("Window not found".to_string()),
+    };
+    let current_pos = window.outer_position().unwrap_or(tauri::PhysicalPosition { x: 0, y: 0 });
+
+    let current_idx = monitors.iter().position(|m| {
+        let p = m.position();
+        let s = m.size();
+        current_pos.x >= p.x && current_pos.x < (p.x + s.width as i32)
+            && current_pos.y >= p.y && current_pos.y < (p.y + s.height as i32)
+    }).unwrap_or(0);
+
+    let next_idx = (current_idx + 1) % monitors.len();
+    switch_display(app, next_idx)?;
+    Ok(next_idx)
 }
 
 #[tauri::command]
@@ -374,7 +410,8 @@ pub fn run() {
             set_glass_mode,
             update_toolbar_bounds,
             get_available_displays,
-            switch_display
+            switch_display,
+            switch_to_next_display
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

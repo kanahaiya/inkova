@@ -22,9 +22,11 @@ export function eventToShortcutKey(e: KeyboardEvent): string {
   return parts.join('+');
 }
 
+export type ActionType = 'undo' | 'redo' | 'clear' | 'toggle-glass' | 'spotlight' | 'zoom' | 'snapshot' | 'escape' | 'help' | 'toggle-tray' | 'hide-tray' | 'toggle-orientation' | 'switch-display' | 'quit';
+
 export class HotkeyManager {
   private onToolSelect: (tool: ToolType) => void;
-  private onAction: (action: 'undo' | 'redo' | 'clear' | 'toggle-glass' | 'spotlight' | 'zoom' | 'snapshot' | 'escape' | 'help' | 'toggle-tray' | 'hide-tray' | 'toggle-orientation' | 'quit') => void;
+  private onAction: (action: ActionType) => void;
   private onTemporaryGlass: (active: boolean, shouldFocus?: boolean) => void;
   private onRadialToggle: (active: boolean) => void;
   private onColorIndex: (index: number) => void;
@@ -38,7 +40,7 @@ export class HotkeyManager {
 
   constructor(options: {
     onToolSelect: (tool: ToolType) => void;
-    onAction: (action: 'undo' | 'redo' | 'clear' | 'toggle-glass' | 'spotlight' | 'zoom' | 'snapshot' | 'escape' | 'help' | 'toggle-tray' | 'hide-tray' | 'toggle-orientation' | 'quit') => void;
+    onAction: (action: ActionType) => void;
     onTemporaryGlass: (active: boolean, shouldFocus?: boolean) => void;
     onRadialToggle: (active: boolean) => void;
     onColorIndex: (index: number) => void;
@@ -106,6 +108,13 @@ export class HotkeyManager {
         await register('CommandOrControl+Shift+A', (event) => {
           if (event.state === 'Pressed') {
             this.onAction('escape');
+          }
+        });
+
+        // Global shortcut to switch to next display screen
+        await register('CommandOrControl+Shift+D', (event) => {
+          if (event.state === 'Pressed') {
+            this.onAction('switch-display');
           }
         });
 

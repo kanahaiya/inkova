@@ -39,6 +39,7 @@ const SHORTCUT_DEFS: ShortcutItemDef[] = [
   { id: 'undo', name: 'Undo Last Stroke', group: 'actions', icon: ICONS.undo },
   { id: 'redo', name: 'Redo Stroke', group: 'actions', icon: ICONS.redo },
   { id: 'snapshot', name: 'Save / Export Snapshot', group: 'actions', icon: ICONS.snapshot },
+  { id: 'switch-display', name: 'Switch Active Display (Next Screen)', group: 'actions', icon: '🖥️' },
   { id: 'toggle-orientation', name: 'Flip Toolbar Orientation', group: 'actions', icon: ICONS.rotate },
   { id: 'toggle-tray', name: 'Hide / Show System Tray', group: 'actions', icon: ICONS.tray },
   { id: 'help', name: 'Shortcuts & Settings Guide', group: 'actions', icon: ICONS.help }
@@ -158,6 +159,7 @@ export class InkovaApp {
         if (action === 'hide-tray') this.handleHideToTray();
         if (action === 'quit') this.handleQuit();
         if (action === 'toggle-orientation') this.toolbar.toggleOrientation();
+        if (action === 'switch-display') this.handleSwitchNextDisplay();
         if (action === 'open-pro') this.openProModal();
       },
       () => {
@@ -222,6 +224,7 @@ export class InkovaApp {
         if (act === 'hide-tray') this.handleHideToTray();
         if (act === 'toggle-tray') this.handleToggleTray();
         if (act === 'toggle-orientation') this.toolbar.toggleOrientation();
+        if (act === 'switch-display') this.handleSwitchNextDisplay();
         if (act === 'quit') this.handleQuit();
         if (act === 'escape') {
           this.closeHelpModal();
@@ -799,6 +802,24 @@ export class InkovaApp {
       }
     } catch {
       this.availableDisplays = [];
+    }
+  }
+
+  private async handleSwitchNextDisplay() {
+    try {
+      if (typeof (window as any).__TAURI_INTERNALS__ !== 'undefined') {
+        const { invoke } = await import('@tauri-apps/api/core');
+        const nextId = await invoke<number>('switch_to_next_display');
+        this.showToast(`🖥️ Switched to Display ${nextId + 1}`);
+        this.diagnostics.trackEvent('display_switched_hotkey', { nextId });
+        await this.loadDisplays();
+        this.syncToolbarBounds();
+      } else {
+        this.showToast('🖥️ Display switching requires multi-monitor Windows runtime');
+      }
+    } catch (e: any) {
+      console.warn('Failed to switch display:', e);
+      this.showToast(`Display switch failed: ${e?.message || e}`);
     }
   }
 
