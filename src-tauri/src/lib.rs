@@ -26,11 +26,20 @@ pub struct DisplayInfo {
     pub is_current: bool,
 }
 
-#[derive(Default)]
 pub struct OverlayState {
     pub is_glass_mode: bool,
     pub toolbar_bounds: Rect,
     pub is_cursor_in_toolbar: bool,
+}
+
+impl Default for OverlayState {
+    fn default() -> Self {
+        Self {
+            is_glass_mode: true,
+            toolbar_bounds: Rect::default(),
+            is_cursor_in_toolbar: false,
+        }
+    }
 }
 
 type SharedOverlayState = Arc<Mutex<OverlayState>>;

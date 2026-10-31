@@ -72,7 +72,7 @@ export class InkovaApp {
     activeColor: '#ef4444',
     activeWidth: 6,
     backdrop: 'transparent',
-    isGlassMode: false,
+    isGlassMode: true,
     spotlightEnabled: false,
     zoomEnabled: false,
     stepCounter: 1,
@@ -326,6 +326,13 @@ export class InkovaApp {
     }
     this.loadDisplays();
     setTimeout(() => this.checkForAppUpdates(false), 4000);
+
+    // Apply initial Glass Mode pass-through on launch
+    if (this.state.isGlassMode) {
+      this.updateGlassBanner();
+      this.updateCursorStyle();
+      this.setTauriClickThrough(true);
+    }
   }
 
   private onPointerDown(e: PointerEvent) {
