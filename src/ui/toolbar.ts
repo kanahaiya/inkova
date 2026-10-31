@@ -269,11 +269,11 @@ export class Toolbar {
         <!-- Section 2: Core Drawing Tools -->
         <div class="capsule-group tools-group">
           ${TOOLS.map(t => {
-            const sc = this.getShortcutDisplay(t.tool, t.shortcut);
-            const keycap = sc.length <= 2 ? sc : sc.slice(0, 2);
-            const isLocked = LicenseManager.getInstance().isToolLocked(t.tool);
-            const proBadge = isLocked ? ' ★ PRO' : '';
-            return `
+      const sc = this.getShortcutDisplay(t.tool, t.shortcut);
+      const keycap = sc.length <= 2 ? sc : sc.slice(0, 2);
+      const isLocked = LicenseManager.getInstance().isToolLocked(t.tool);
+      const proBadge = isLocked ? ' ★ PRO' : '';
+      return `
             <button class="tool-capsule-btn ${this.state.currentTool === t.tool ? 'active' : ''} ${isLocked ? 'pro-tool' : ''}" 
               data-tool="${t.tool}" 
               title="${t.name}${proBadge} [${sc}]">
@@ -281,7 +281,7 @@ export class Toolbar {
               <span class="tool-keycap">${keycap}</span>
             </button>
           `;
-          }).join('')}
+    }).join('')}
         </div>
 
         <div class="capsule-divider"></div>
