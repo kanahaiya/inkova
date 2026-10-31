@@ -562,13 +562,21 @@ export class Toolbar {
     let isDragging = false;
     let startX = 0, startY = 0;
     let initialLeft = 0, initialTop = 0;
+    let capturedHandle: HTMLElement | null = null;
+    let capturedPointerId: number | null = null;
 
-    const onMouseDown = (e: MouseEvent) => {
-      const handle = (e.target as HTMLElement).closest('.drag-handle, .toolbar-collapsed-pill');
+    const onPointerDown = (e: PointerEvent) => {
+      // Only drag with primary mouse button (button === 0)
+      if (e.button !== 0) return;
+
+      // If user clicked the diamond collapse button, allow direct click without dragging
+      if ((e.target as HTMLElement).closest('#btn-diamond-toggle')) {
+        return;
+      }
+
+      const handle = (e.target as HTMLElement).closest<HTMLElement>('.drag-handle, .toolbar-collapsed-pill');
       if (!handle) return;
 
-      isDragging = true;
-      this.onDragStateChange?.(true);
       startX = e.clientX;
       startY = e.clientY;
 
@@ -576,55 +584,73 @@ export class Toolbar {
       initialLeft = rect.left;
       initialTop = rect.top;
 
+      capturedHandle = handle;
+      capturedPointerId = e.pointerId;
+
+      try {
+        handle.setPointerCapture(e.pointerId);
+      } catch {}
+
       this.container.style.transition = 'none';
-      window.addEventListener('mousemove', onMouseMove);
-      window.addEventListener('mouseup', onMouseUp);
-      e.preventDefault();
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerUp);
     };
 
-    let hasTriggeredOffscreenSwitch = false;
-
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return;
+    const onPointerMove = (e: PointerEvent) => {
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
 
-      // Allow dragging off the screen edges slightly to trigger multi-monitor jump
-      const rawLeft = initialLeft + dx;
-      const rawTop = initialTop + dy;
-
-      // If user drags to screen edge (<= 2px), trigger display switch without dropping drag
-      if (!hasTriggeredOffscreenSwitch) {
-        if (e.clientX <= 2 || e.clientX >= window.innerWidth - 3) {
-          hasTriggeredOffscreenSwitch = true;
-          this.onAction('switch-display');
-          // Reset coordinate reference point so the drag smoothly continues on the new monitor
-          startX = e.clientX;
-          startY = e.clientY;
-          initialLeft = rawLeft;
-          initialTop = rawTop;
-          // Debounce so it doesn't bounce repeatedly between screens in a loop
-          setTimeout(() => {
-            hasTriggeredOffscreenSwitch = false;
-          }, 600);
+      if (!isDragging) {
+        if (Math.hypot(dx, dy) > 4) {
+          isDragging = true;
+          this.onDragStateChange?.(true);
+        } else {
+          return;
         }
       }
 
-      const newLeft = Math.max(8, Math.min(window.innerWidth - this.container.offsetWidth - 8, rawLeft));
-      const newTop = Math.max(8, Math.min(window.innerHeight - this.container.offsetHeight - 8, rawTop));
+      const rawLeft = initialLeft + dx;
+      const rawTop = initialTop + dy;
+
+      const minLeft = 4;
+      const maxLeft = Math.max(minLeft, window.innerWidth - this.container.offsetWidth - 4);
+      const minTop = 4;
+      const maxTop = Math.max(minTop, window.innerHeight - this.container.offsetHeight - 4);
+
+      const newLeft = Math.max(minLeft, Math.min(maxLeft, rawLeft));
+      const newTop = Math.max(minTop, Math.min(maxTop, rawTop));
 
       this.container.style.left = `${newLeft}px`;
       this.container.style.top = `${newTop}px`;
       this.container.style.transform = 'none';
     };
 
-    const onMouseUp = () => {
-      if (!isDragging) return;
+    const onPointerUp = (e: PointerEvent) => {
+      if (capturedHandle && capturedPointerId !== null) {
+        try {
+          capturedHandle.releasePointerCapture(capturedPointerId);
+        } catch {}
+      }
+      capturedHandle = null;
+      capturedPointerId = null;
+
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+
+      const movedDist = Math.hypot(e.clientX - startX, e.clientY - startY);
+
+      if (!isDragging) {
+        // Was a simple tap/click without dragging
+        if (this.isCollapsed && movedDist < 5) {
+          this.expand();
+        }
+        return;
+      }
+
       isDragging = false;
       this.onDragStateChange?.(false);
-      hasTriggeredOffscreenSwitch = false;
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
 
       // Smart Edge Snapping & Auto-Orientation
       const screenW = window.innerWidth;
@@ -705,6 +731,6 @@ export class Toolbar {
       }, 240);
     };
 
-    this.container.addEventListener('mousedown', onMouseDown);
+    this.container.addEventListener('pointerdown', onPointerDown);
   }
 }
