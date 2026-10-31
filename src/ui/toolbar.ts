@@ -231,23 +231,13 @@ export class Toolbar {
 
     if (this.isCollapsed) {
       this.container.innerHTML = `
-        <div class="toolbar-collapsed-pill ${this.orientation === 'vertical' ? 'vertical' : ''}" id="collapsed-pill-body" title="Inkova (Click anywhere to Expand • Drag to Move)">
-          <span class="pill-logo" title="Inkova">💎</span>
-          <div class="capsule-divider"></div>
-          <button class="expand-btn" id="btn-expand" title="Expand Toolbar [Click]">${ICONS.expand}</button>
-          <button class="expand-btn tray-mini-btn" id="btn-tray-mini" title="Hide to System Tray [Ctrl+Shift+H]">${ICONS.tray}</button>
+        <div class="toolbar-collapsed-pill ${this.orientation === 'vertical' ? 'vertical' : ''}" id="collapsed-pill-body" title="Inkova (Click to Expand • Drag to Move)">
+          <span class="pill-logo" id="btn-diamond-expand" title="Click to Expand Inkova Toolbar">💎</span>
         </div>
       `;
-      this.container.querySelector('#collapsed-pill-body')?.addEventListener('click', (e) => {
-        const target = e.target as HTMLElement;
-        if (!target.closest('#btn-tray-mini')) {
-          this.isCollapsed = false;
-          this.render();
-        }
-      });
-      this.container.querySelector('#btn-tray-mini')?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.onAction('hide-tray');
+      this.container.querySelector('#collapsed-pill-body')?.addEventListener('click', () => {
+        this.isCollapsed = false;
+        this.render();
       });
       return;
     }
@@ -263,8 +253,8 @@ export class Toolbar {
       <!-- Capsule Shell -->
       <div class="capsule-bar">
         <!-- Section 1: Logo & Drag Handle -->
-        <div class="capsule-group drag-handle" title="Drag to reposition (Snaps to edges / Auto-rotates)">
-          <span class="app-logo">💎</span>
+        <div class="capsule-group drag-handle" title="Drag to reposition • Click 💎 to Collapse">
+          <span class="app-logo" id="btn-diamond-toggle" title="Click to Collapse Toolbar">💎</span>
           <span class="grip-dots">⋮⋮</span>
         </div>
 
@@ -393,6 +383,12 @@ export class Toolbar {
   }
 
   private attachEvents() {
+    // Diamond click to Collapse
+    this.container.querySelector('#btn-diamond-toggle')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.collapse();
+    });
+
     // Switch Display
     this.container.querySelector('#btn-switch-display')?.addEventListener('click', (e) => {
       e.stopPropagation();
