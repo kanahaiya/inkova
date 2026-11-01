@@ -2,6 +2,8 @@
   "name": "inkova",
   "private": true,
   "version": "0.1.9",
+  "description": "Inkova - Screen Annotation & Presentation Toolkit",
+  "author": "Inkova Software <contact@inkova.app>",
   "type": "module",
   "scripts": {
     "dev": "vite",
